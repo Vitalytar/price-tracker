@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use PHPHtmlParser\Dom;
-use Psr\Http\Client\ClientExceptionInterface;
+use DiDom\Document;
+use App\ProductPrice;
+use App\Product;
 
 /**
  * Class ParseProductController
@@ -14,13 +15,25 @@ use Psr\Http\Client\ClientExceptionInterface;
 class ParseProductController extends Controller
 {
     /**
-     * @var Dom
+     * @var Document
      */
-    protected $domParser;
+    protected $document;
 
-    public function __construct(Dom $domParser)
+    /**
+     * @var ProductPrice
+     */
+    protected $productPriceModel;
+
+    /**
+     * @var Product
+     */
+    protected $productDetailsModel;
+
+    public function __construct(Document $document, ProductPrice $productPriceModel, Product $productDetailsModel)
     {
-        $this->domParser = $domParser;
+        $this->document = $document;
+        $this->productPriceModel = $productPriceModel;
+        $this->productDetailsModel = $productDetailsModel;
     }
 
     /**
@@ -30,13 +43,50 @@ class ParseProductController extends Controller
      */
     public function parse(Request $request)
     {
-        try {
-            $this->domParser->loadFromUrl($request->input('price-url'));
-            $linkHtml = $this->domParser->outerHtml;
-//            $this->domParser->getElementById();
-        } catch (\Exception $e) {
-        } catch (ClientExceptionInterface $e) {
+        // TODO: If page doesn't exist, if it isn't product page (exceptions handler)
+        $this->productDetailsModel->product_url = $request->input('product-url');
+        $dom = $this->document->loadHtmlFile($request->input('product-url'));
+        $this->parseAndSaveProductName($dom);
+        $this->parseAndSaveProductPrice($dom);
+
+        return redirect()->back()->with('status', 'Product data successfully parsed and stored into database!');
+    }
+
+    public function parseAndSaveProductName($dom)
+    {
+        $productNode = $dom->find('.product-righter h1')[0]->text();
+        $productName = $this->escapeCRLF($productNode);
+        $this->productDetailsModel->product_name = $productName;
+        $this->productDetailsModel->product_image_url = $productName;
+
+        $this->productDetailsModel->save();
+    }
+
+    public function parseAndSaveProductPrice($dom)
+    {
+        $productNode = $dom->find('.product-price-details__price');
+        if (!empty($productNode)) {
+            $productNode = $productNode[0]->text();
+            preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productNode), $result);
+            $productPrice = implode('.', $result[0]);
+
+            $this->productPriceModel->product_relation_id = $this->productDetailsModel->id;
+            $this->productPriceModel->product_price = $productPrice;
+        } else {
+            $productNode = $dom->find('.product-price-details__block')[0]->text();
+
+            preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productNode), $result);
+            $productPrice = implode('.', $result[0]);
+
+            $this->productPriceModel->product_relation_id = '5';
+            $this->productPriceModel->product_price = $productPrice;
         }
 
+        $this->productPriceModel->save();
+    }
+
+    public function escapeCRLF($text)
+    {
+        return str_replace(["\r\n", "\n", "\r"], ' ', $text);
     }
 }

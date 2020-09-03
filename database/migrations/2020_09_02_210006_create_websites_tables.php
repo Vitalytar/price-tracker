@@ -16,7 +16,7 @@ class CreateWebsitesTables extends Migration
      */
     public function up()
     {
-        Schema::create('websites_pages_main_info', function (Blueprint $table) {
+        Schema::create('product_details', function (Blueprint $table) {
             $table->id();
             $table->string('product_name');
             $table->string('product_url');

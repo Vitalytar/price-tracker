@@ -63,11 +63,16 @@
 <body>
 @extends('layouts/app')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
     <form method="POST" action="<?= route('parse-product') ?>">
         @csrf
         <label>
             <span>Ievadiet produkta linku lai dabūtu cenu izmaiņu grafiku</span>
-            <input type="url" name="price-url">
+            <input type="url" name="product-url">
         </label>
         <button type="submit">Parse price!</button>
     </form>
