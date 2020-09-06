@@ -1,0 +1,28 @@
+h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.all-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 30px;
+
+    .product-item {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+
+        .product-name {
+            font-weight: 700;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .product-main-image {
+            align-self: center;
+            max-height: 200px;
+            max-width: 200px;
+        }
+    }
+}
