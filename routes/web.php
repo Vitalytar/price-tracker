@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Product;
 
@@ -20,13 +22,40 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// ==================== CONTROLLERS ====================
 Route::post('/parse-product', 'ParseProductController@parse')->name('parse-product');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/{product-name}', 'ProductPageController@showProduct')->name('product-page');
+
+// ==================== PAGES ====================
+Route::get('/check-product-price', function () {
+   return view('products/check-product-price');
+})->name('check-product-price');
+
 Route::get('/product-info', function () {
     return view('products/product-info');
 })->name('product-info');
+
 Route::get('all-products', function() {
     $products = Product::inRandomOrder()->get();
 
     return view('products/all-products-listing', ['products' => $products]);
 })->name('all-products');
+
+Route::get('requested-products', function () {
+    $products = DB::table('user_requested_product')
+        ->join('product_details', 'user_requested_product.requested_product_id', '=', 'product_details.id')
+        ->select(
+            'user_requested_product.requested_product_id', 'user_requested_product.created_at',
+            'product_details.product_name', 'product_details.product_url', 'product_details.product_image_url',
+            'product_details.created_at'
+        )
+        ->groupBy('user_requested_product.requested_product_id')
+        ->orderByDesc('user_requested_product.created_at')
+        ->get();
+
+    return view('products/requested-products', ['products' => $products]);
+})->name('requested-products');
+
+Auth::routes();
+
