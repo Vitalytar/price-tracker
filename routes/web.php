@@ -25,7 +25,7 @@ Auth::routes();
 // ==================== CONTROLLERS ====================
 Route::post('/parse-product', 'ParseProductController@parse')->name('parse-product');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/{product-name}', 'ProductPageController@showProduct')->name('product-page');
+Route::get('product/{productId}/{productName}', ['uses' => 'ProductPageController@showProduct'])->name('product-page');
 
 // ==================== PAGES ====================
 Route::get('/check-product-price', function () {
@@ -48,8 +48,9 @@ Route::get('requested-products', function () {
         ->select(
             'user_requested_product.requested_product_id', 'user_requested_product.created_at',
             'product_details.product_name', 'product_details.product_url', 'product_details.product_image_url',
-            'product_details.created_at'
+            'product_details.created_at', 'product_details.id'
         )
+        ->where('user_requested_product.user_id', '=', Auth::user()->id)
         ->groupBy('user_requested_product.requested_product_id')
         ->orderByDesc('user_requested_product.created_at')
         ->get();

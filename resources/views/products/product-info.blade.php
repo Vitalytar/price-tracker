@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Product Info</title>
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <script src="{{ asset('js/app.js') }}"></script>
-    <style>
-        .product-main-info {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
+@section('pageTitle', 'Produkts | ' . session('main_data')['product_name'])
 @extends('layouts/app')
 @section('content')
     @if (session('status'))
@@ -29,9 +14,9 @@
             $priceData = session('price_data');
             ?>
             <h1><?= $productData['product_name'] ?></h1>
-                <img class="product-main-image" src="{{ asset('storage/' . $productData['product_image']) }}"
-                     alt="product_image">
-                <table class="table table-striped product-info-table">
+            <img class="product-main-image" src="{{ asset('storage/' . $productData['product_image']) }}"
+                 alt="product_image">
+            <table class="table table-striped product-info-table">
                 <thead>
                     <th><?= __('Datums') ?></th>
                     <th><?= __('Cena') ?></th>
@@ -50,5 +35,3 @@
         <h3>How did you get here?</h3>
     @endif
 @endsection
-</body>
-</html>

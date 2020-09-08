@@ -122,7 +122,7 @@ class ParseProductController extends Controller
 
         if (!isset($product[0])) {
             $this->productDetailsModel->product_name = $productName;
-            $this->productDetailsModel->product_image_url = strtolower(str_replace(' ', '-', $productName)) . '.png';
+            $this->productDetailsModel->product_image_url = strtolower(str_replace([' ', '/'], '-', $productName)) . '.png';
             $this->productDetailsModel->save();
         } else {
             $this->productDetailsModel = $product[0];
@@ -131,7 +131,7 @@ class ParseProductController extends Controller
 
     public function downloadProductImage($url, $productName)
     {
-        $fileName = strtolower(str_replace(' ', '-', $productName));
+        $fileName = strtolower(str_replace([' ', '/'], '-', $productName));
         $imageDirectory = storage_path('app/public') . '/' . $fileName . '.png';
 
         if (!file_exists(storage_path('app/public') . '/' . $fileName . '.png')) {

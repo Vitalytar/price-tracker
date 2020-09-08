@@ -1,4 +1,18 @@
+body {
+    font-family: 'Varela', sans-serif;
+}
+
 main.page-content {
     max-width: 1280px;
     margin: 10px auto;
+}
+
+.navbar-nav .nav-item:not(.dropdown) {
+    font-weight: 700;
+
+    a.nav-link {
+        &:hover {
+            color: #ffffff;
+        }
+    }
 }
