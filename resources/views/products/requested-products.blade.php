@@ -18,12 +18,12 @@
                         'productName' => strtr(strtolower(str_replace([' ', ','], '-', $product->product_name)), $escapeLatvian),
                         'productId' => $product->id
                     ]
-                    ) ?>">
+                    ) ?>" class="link-to-product-page">
                         <img class="product-main-image" src="{{ asset('storage/' . $product->product_image_url) }}"
                              alt="product_image">
                         <div class="product-name"><?= $product->product_name ?></div>
-                        <div class="link-to-product">
-                            <a href="<?= $product->product_url ?>" target="_blank"><?= __('Links uz produktu') ?></a>
+                        <div class="link-to-product-source">
+                            <a href="<?= $product->product_url ?>" target="_blank"><?= __('Avots: ') . $product->source_web ?></a>
                         </div>
                     </a>
                 </div>

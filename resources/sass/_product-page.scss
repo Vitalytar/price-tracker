@@ -11,6 +11,12 @@
         margin: 0;
     }
 
+    .product-data {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
     .product-main-image {
         margin-bottom: 20px;
         max-height: 400px;

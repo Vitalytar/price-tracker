@@ -8,22 +8,49 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         grid-gap: 30px;
+        padding: 0 25px;
 
         .product-item {
             display: flex;
             flex-direction: column;
-            align-self: center;
             text-align: center;
+            height: 100%;
+            padding: 25px;
+            --borderWidth: 3px;
+            background: #ffffff;
+            position: relative;
+            border-radius: var(--borderWidth);
+
+            &:after {
+                content: '';
+                position: absolute;
+                top: calc(-1 * var(--borderWidth));
+                left: calc(-1 * var(--borderWidth));
+                height: calc(100% + var(--borderWidth) * 2);
+                width: calc(100% + var(--borderWidth) * 2);
+                background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+                border-radius: calc(2 * var(--borderWidth));
+                z-index: -1;
+                animation: animatedgradient 3s ease alternate infinite;
+                background-size: 300% 300%;
+            }
+
+            .link-to-product-source {
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+            }
+
+            .link-to-product-page {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: #009bff;
+            }
 
             .product-name {
                 font-weight: 700;
-                font-size: 16px;
-                text-align: center;
-            }
-
-            .link-to-product {
-                text-align: center;
-                font-weight: 500;
                 font-size: 16px;
             }
 

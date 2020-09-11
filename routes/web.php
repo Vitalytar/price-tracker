@@ -48,7 +48,7 @@ Route::get('requested-products', function () {
         ->select(
             'user_requested_product.requested_product_id', 'user_requested_product.created_at',
             'product_details.product_name', 'product_details.product_url', 'product_details.product_image_url',
-            'product_details.created_at', 'product_details.id'
+            'product_details.created_at', 'product_details.id', 'product_details.source_web'
         )
         ->where('user_requested_product.user_id', '=', Auth::user()->id)
         ->groupBy('user_requested_product.requested_product_id')

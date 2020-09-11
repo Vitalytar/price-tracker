@@ -12,16 +12,20 @@
     <div class="all-products">
         @foreach ($products as $product)
             <div class="product-item">
-                <a href="<?= route('product-page', [
-                    'productName' => strtr(strtolower(str_replace([' ', ','], '-', $product->product_name)), $escapeLatvian),
+                <a href="<?= route(
+                    'product-page', [
+                    'productName' => strtr(
+                        strtolower(str_replace([' ', ','], '-', $product->product_name)), $escapeLatvian
+                    ),
                     'productId' => $product->id
-                ]) ?>">
-                <img class="product-main-image" src="{{ asset('storage/' . $product->product_image_url) }}"
+                ]
+                ) ?>" class="link-to-product-page">
+                    <img class="product-main-image" src="{{ asset('storage/' . $product->product_image_url) }}"
                          alt="product_image">
                     <div class="product-name"><?= $product->product_name ?></div>
-                    <div class="link-to-product">
-                        <a href="<?= $product->product_url ?>" target="_blank"><?= __('Links uz produktu') ?></a>
-                        <div class="product-source"><?= __('Avots: ') . $product->source_web ?></div>
+                    <div class="link-to-product-source">
+                        <a href="<?= $product->product_url ?>" target="_blank"><?= __('Avots: ')
+                            . $product->source_web ?></a>
                     </div>
                 </a>
             </div>

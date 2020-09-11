@@ -1,0 +1,29 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 15;
+
+    .container {
+        max-width: 1280px;
+
+        .navbar-nav {
+            .nav-link {
+                color: #000000;
+            }
+
+            .nav-item {
+                font-weight: 700;
+                font-size: 18px;
+            }
+        }
+
+        .navbar-nav:not(.ml-auto) {
+            a.nav-link {
+                &:hover {
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+}

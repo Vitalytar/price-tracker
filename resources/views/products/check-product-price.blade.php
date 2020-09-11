@@ -7,6 +7,6 @@
             <span>Ievadiet produkta linku lai dabūtu cenu izmaiņu grafiku</span>
             <input type="url" name="product-url">
         </label>
-        <input type="submit" value="<?= __('Pārbaudīt cenas vēsturi') ?>">
+        <button type="submit"><?= __('Pārbaudīt cenas vēsturi') ?></button>
     </form>
 @endsection

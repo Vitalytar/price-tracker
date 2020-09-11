@@ -2,7 +2,6 @@
 $body-bg: #f8fafc;
 
 // Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
@@ -17,3 +16,19 @@ $yellow: #ffed4a;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+
+@font-face {
+    font-family: 'KumbhSans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('fonts/KumbhSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'KumbhSans';
+    font-style: normal;
+    font-weight: 500;
+    src: url('fonts/KumbhSans-Regular.ttf') format('truetype');
+}
+
+$f-base-font-family: 'KumbhSans', sans-serif;

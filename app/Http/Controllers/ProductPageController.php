@@ -34,6 +34,7 @@ class ProductPageController extends Controller
         $productPrices = Product::join('product_prices', 'product_details.id', '=', 'product_prices.product_relation_id')
             ->where('product_details.id', $productId)
             ->select('product_prices.*')
+            ->orderBy('product_prices.created_at', 'desc')
             ->get();
 
         foreach ($productPrices as $productPrice) {
