@@ -40,7 +40,7 @@
                         <div class="search-box">
                             <form role="search" method="GET" action="#">
                                 <input id="search" type="search" placeholder="<?= __('Meklēt...') ?>" autofocus required />
-                                <button type="submit"><?= __('Go') ?><i class="fas fa-arrow-right"></i></button>
+                                <button type="submit"><i class="fas fa-arrow-right"></i></button>
                             </form>
                         </div>
                     </ul>
