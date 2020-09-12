@@ -1,9 +1,16 @@
 @section('pageTitle', $productMainData['product_name'])
 @extends('layouts/app')
 @section('content')
+    <?php $productName = $productMainData['product_name'] ?>
     <div class="product-main-info">
-        <h1><?= $productMainData['product_name'] ?></h1>
-        <div class="product-data">
+        <div class="product-page-title">
+            <?= $productName ?>
+            <div><?= $productName ?></div>
+            <div><?= $productName ?></div>
+            <div><?= $productName ?></div>
+            <div><?= $productName ?></div>
+        </div>
+        <div class="product-details">
             <img class="product-main-image" src="{{ asset('storage/' . $productMainData['product_image_url']) }}"
                  alt="product_image">
             <table class="table table-striped product-info-table">

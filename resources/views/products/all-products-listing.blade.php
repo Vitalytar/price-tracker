@@ -1,5 +1,9 @@
 @section('pageTitle', 'Visi produkti')
 @extends('layouts/app')
+@section('js')
+{{--    @include('js/layout-switcher.js')--}}
+    <script src="{{ asset('js/layout-switcher.js') }}"></script>
+@endsection
 @section('content')
     <?php
     $escapeLatvian = [
@@ -9,13 +13,17 @@
     ]
     ?>
     <h1><?= __('Visi produkti') ?></h1>
-    <div class="all-products">
+    <div class="change-product-view">
+        <i class="fas fa-th fa-2x grid-icon active" onclick="gridView()"></i>
+        <i class="fas fa-list fa-2x list-icon disabled" onclick="listView()"></i>
+    </div>
+    <div class="all-products grid-view">
         @foreach ($products as $product)
             <div class="product-item">
                 <a href="<?= route(
                     'product-page', [
                     'productName' => strtr(
-                        strtolower(str_replace([' ', ','], '-', $product->product_name)), $escapeLatvian
+                        strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian
                     ),
                     'productId' => $product->id
                 ]

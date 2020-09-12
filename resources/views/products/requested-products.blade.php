@@ -10,12 +10,16 @@
     ?>
     @if ($products->count() > 0)
         <h1><?= __('Visi iepriekš pieprasītie produkti') ?></h1>
-        <div class="all-products">
+        <div class="change-product-view">
+            <i class="fas fa-th fa-2x grid-icon active" onclick="gridView()"></i>
+            <i class="fas fa-list fa-2x list-icon disabled" onclick="listView()"></i>
+        </div>
+        <div class="all-products grid-view">
             @foreach ($products as $product)
                 <div class="product-item">
                     <a href="<?= route(
                         'product-page', [
-                        'productName' => strtr(strtolower(str_replace([' ', ','], '-', $product->product_name)), $escapeLatvian),
+                        'productName' => strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian),
                         'productId' => $product->id
                     ]
                     ) ?>" class="link-to-product-page">

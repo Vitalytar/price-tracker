@@ -7,6 +7,7 @@ use DiDom\Document;
 use App\ProductPrice;
 use App\Product;
 use App\UserProductRequest;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class ParseProductController
@@ -19,6 +20,11 @@ class ParseProductController extends Controller
         '€',
         '$',
         '₽'
+    ];
+
+    const AVAILABLE_WEBSITES = [
+        'www.1a.lv',
+        'www.rdveikals.lv'
     ];
 
     /**
@@ -79,6 +85,12 @@ class ParseProductController extends Controller
         $this->productDetailsModel->product_url = $request->input('product-url');
         $this->productDetailsModel->source_web = parse_url($request->input('product-url'), PHP_URL_HOST);
 
+        if (!in_array($this->productDetailsModel->source_web, self::AVAILABLE_WEBSITES)) {
+            return redirect()->back()->with([
+                'warning' => __('Dotā vietne netiek atbalstīta!')
+            ]);
+        }
+
         $dom = $this->document->loadHtmlFile($request->input('product-url'));
         $this->parseAndSaveProductNameAndImage($dom);
         $this->parseAndSaveProductPrice($dom);
@@ -111,6 +123,9 @@ class ParseProductController extends Controller
         ]);
     }
 
+    /**
+     * @param $dom
+     */
     public function parseAndSaveProductNameAndImage($dom)
     {
         $productNode = $dom->find('.product-righter h1')[0]->text();
@@ -129,8 +144,13 @@ class ParseProductController extends Controller
         }
     }
 
+    /**
+     * @param $url
+     * @param $productName
+     */
     public function downloadProductImage($url, $productName)
     {
+        Storage::download($url);
         $fileName = strtolower(str_replace([' ', '/'], '-', $productName));
         $imageDirectory = storage_path('app/public') . '/' . $fileName . '.png';
 
@@ -139,6 +159,9 @@ class ParseProductController extends Controller
         }
     }
 
+    /**
+     * @param $dom
+     */
     public function parseAndSaveProductPrice($dom)
     {
         $productNode = $dom->find('.product-price-details__price');
@@ -165,6 +188,11 @@ class ParseProductController extends Controller
         $this->productPriceModel->save();
     }
 
+    /**
+     * @param $productNode
+     *
+     * @return mixed
+     */
     public function checkCurrency($productNode)
     {
         foreach (self::CURRENCIES as $currency) {
@@ -174,6 +202,11 @@ class ParseProductController extends Controller
         }
     }
 
+    /**
+     * @param $text
+     *
+     * @return string
+     */
     public function escapeCRLF($text)
     {
         return trim(str_replace(["\r\n", "\n", "\r"], ' ', $text));

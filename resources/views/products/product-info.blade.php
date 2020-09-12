@@ -14,24 +14,26 @@
             $priceData = session('price_data');
             ?>
             <h1><?= $productData['product_name'] ?></h1>
-            <img class="product-main-image" src="{{ asset('storage/' . $productData['product_image']) }}"
-                 alt="product_image">
-            <table class="table table-striped product-info-table">
-                <thead>
+            <div class="product-details">
+                <img class="product-main-image" src="{{ asset('storage/' . $productData['product_image']) }}"
+                     alt="product_image">
+                <table class="table table-striped product-info-table">
+                    <thead>
                     <th><?= __('Datums') ?></th>
                     <th><?= __('Cena') ?></th>
-                </thead>
-                <tbody>
-                @foreach ($priceData as $price)
-                    <tr>
-                        <td><?= $price['date'] ?></td>
-                        <td><?= $price['price'] . $price['currency'] ?></td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    @foreach ($priceData as $price)
+                        <tr>
+                            <td><?= $price['date'] ?></td>
+                            <td><?= $price['price'] . $price['currency'] ?></td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     @else
-        <h3>How did you get here?</h3>
+        <h3>How did you get there?</h3>
     @endif
 @endsection

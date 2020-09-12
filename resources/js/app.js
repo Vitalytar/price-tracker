@@ -13,3 +13,4 @@ require('./bootstrap');
  */
 
 require('./components/Example');
+window.Jquery = require('jquery');

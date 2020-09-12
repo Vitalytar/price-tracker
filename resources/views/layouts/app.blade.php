@@ -9,6 +9,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @yield('js')
 </head>
 <body>
     <div id="app">
@@ -34,6 +35,14 @@
                                 <a class="nav-link hvr-bounce-to-top" href="<?= route('requested-products') ?>"><?= __('Pieprasītie produkti') ?></a>
                             </li>
                         @endauth
+                    </ul>
+                    <ul class="navbar-nav search">
+                        <div class="search-box">
+                            <form role="search" method="GET" action="#">
+                                <input id="search" type="search" placeholder="<?= __('Meklēt...') ?>" autofocus required />
+                                <button type="submit"><?= __('Go') ?><i class="fas fa-arrow-right"></i></button>
+                            </form>
+                        </div>
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         @guest

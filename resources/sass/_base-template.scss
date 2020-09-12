@@ -5,6 +5,39 @@ body {
 main.page-content {
     max-width: 1280px;
     margin: 70px auto 50px auto;
+    padding: 0 25px;
+
+    .welcome-title-box {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        h1 {
+            font-size: 48px;
+            font-weight: 900;
+            background-color: #000;
+            color: #fff;
+            display: block;
+            padding: .5em;
+
+            &:nth-child(1) {
+                position: absolute;
+                background-color: #fff;
+                color: #000;
+                clip-path: inset(-1% -1% 50% -1%); // Added the negative values to prevent icky "bleed" in Chrome
+            }
+        }
+    }
+
+    .alert {
+        border: 2px solid black;
+        color: black;
+
+        &.alert-warning {
+            background-color: #ff9800;
+        }
+    }
 
     button[type='submit'] {
         width: 220px;

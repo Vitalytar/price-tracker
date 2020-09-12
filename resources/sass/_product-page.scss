@@ -1,24 +1,60 @@
 .product-main-info {
     text-align: center;
 
-    h1 {
-        font-size: 48px;
-        font-weight: 800;
-        background: -webkit-linear-gradient(45deg, #09009f, #00ff95 80%);
-        background-clip: border-box;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin: 0;
+    .product-page-title {
+        position: relative;
+        margin: auto;
+        height: max-content;
+        color: transparent;
+        font-family: 'Cambay', sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.03em;
+
+        > div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            color: black;
+            pointer-events: none;
+
+            &:nth-child(1) {
+                -webkit-mask-image: linear-gradient(black 25%, transparent 25%);
+                mask-image: linear-gradient(black 25%, transparent 25%);
+                animation: deconstructed1 2s 1;
+            }
+
+            &:nth-child(2) {
+                -webkit-mask-image: linear-gradient(transparent 25%, black 25%, black 50%, transparent 50%);
+                mask-image: linear-gradient(transparent 25%, black 25%, black 50%, transparent 50%);
+                animation: deconstructed2 2s 1;
+            }
+
+            &:nth-child(3) {
+                -webkit-mask-image: linear-gradient(transparent 50%, black 50%, black 75%, transparent 75%);
+                mask-image: linear-gradient(transparent 50%, black 50%, black 75%, transparent 75%);
+                animation: deconstructed3 2s 1;
+            }
+
+            &:nth-child(4) {
+                -webkit-mask-image: linear-gradient(transparent 75%, black 75%);
+                mask-image: linear-gradient(transparent 75%, black 75%);
+                animation: deconstructed4 2s 1;
+            }
+        }
     }
 
-    .product-data {
+    .product-details {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        margin-top: 25px;
     }
 
     .product-main-image {
-        margin-bottom: 20px;
         max-height: 400px;
         max-width: 400px;
     }

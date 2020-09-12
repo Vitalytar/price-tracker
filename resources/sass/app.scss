@@ -1,8 +1,14 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
+// Font Awesome
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
 // Variables
 @import 'variables';
+
+// Misc
+@import 'components/misc';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';

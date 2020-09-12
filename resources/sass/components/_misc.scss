@@ -1,0 +1,47 @@
+@keyframes deconstructed1 {
+    0% {
+        transform: translateX(100%);
+    }
+    26% {
+        transform: translateX(0%);
+    }
+    81% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes deconstructed2 {
+    0% {
+        transform: translateX(100%);
+    }
+    24% {
+        transform: translateX(0.5%);
+    }
+    81% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes deconstructed3 {
+    0% {
+        transform: translateX(100%);
+    }
+    22% {
+        transform: translateX(0%);
+    }
+    81% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes deconstructed4 {
+    0% {
+        transform: translateX(100%);
+    }
+    20% {
+        transform: translateX(0%);
+    }
+    80% {
+        transform: translateX(0%);
+    }
+}
