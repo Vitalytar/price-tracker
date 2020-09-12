@@ -7,7 +7,6 @@ use DiDom\Document;
 use App\ProductPrice;
 use App\Product;
 use App\UserProductRequest;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class ParseProductController
@@ -25,6 +24,13 @@ class ParseProductController extends Controller
     const AVAILABLE_WEBSITES = [
         'www.1a.lv',
         'www.rdveikals.lv'
+    ];
+
+    const ESCAPE_RUS = [
+        'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п',
+        'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я',
+        'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П',
+        'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'
     ];
 
     /**
@@ -81,19 +87,31 @@ class ParseProductController extends Controller
      */
     public function parse(Request $request)
     {
-        // TODO: If page doesn't exist, if it isn't product page (exceptions handler)
         $this->productDetailsModel->product_url = $request->input('product-url');
-        $this->productDetailsModel->source_web = parse_url($request->input('product-url'), PHP_URL_HOST);
+        $sourceWeb = parse_url($request->input('product-url'), PHP_URL_HOST);
+        $this->productDetailsModel->source_web = $sourceWeb;
 
-        if (!in_array($this->productDetailsModel->source_web, self::AVAILABLE_WEBSITES)) {
-            return redirect()->back()->with([
-                'warning' => __('Dotā vietne netiek atbalstīta!')
-            ]);
+        if (!in_array($sourceWeb, self::AVAILABLE_WEBSITES)) {
+            return redirect()->back()->with(
+                [
+                    'warning' => __('Dotā vietne netiek atbalstīta!')
+                ]
+            );
         }
 
         $dom = $this->document->loadHtmlFile($request->input('product-url'));
-        $this->parseAndSaveProductNameAndImage($dom);
-        $this->parseAndSaveProductPrice($dom);
+
+        if ($sourceWeb == 'www.1a.lv') {
+            $this->parseProductData(
+                $dom, '.product-righter h1', '.product-gallery-slider__slide__inner img', $sourceWeb
+            );
+            $this->parseAndSaveProductPrice($dom);
+        } else {
+            if ($sourceWeb == 'www.rdveikals.lv') {
+                $this->parseProductData($dom, 'h1', 'img', $sourceWeb);
+                $this->rdParsePrice($dom);
+            }
+        }
 
         $this->userRequestedProductModel->user_id = ($request->user()) ? $request->user()->id : 0;
         $this->userRequestedProductModel->requested_product_id = $this->productDetailsModel->id;
@@ -116,47 +134,54 @@ class ParseProductController extends Controller
             ];
         }
 
-        return redirect()->route('product-info')->with([
-            'status' => __('Produkta dati veiksmīgi tika paņemti un saglabāti!'),
-            'main_data' => $this->productData,
-            'price_data' => $productPrices
-        ]);
+        return redirect()->route('product-info')->with(
+            [
+                'status' => __('Produkta dati veiksmīgi tika paņemti un saglabāti!'),
+                'main_data' => $this->productData,
+                'price_data' => $productPrices
+            ]
+        );
     }
 
-    /**
-     * @param $dom
-     */
-    public function parseAndSaveProductNameAndImage($dom)
+    public function parseProductData($dom, $productNameSelector, $imageSelector, $source)
     {
-        $productNode = $dom->find('.product-righter h1')[0]->text();
-        $productImage = $dom->find('.product-gallery-slider__slide__inner img')[0]->getAttribute('src');
-        $productName = $this->escapeCRLF($productNode);
-        $this->downloadProductImage($productImage, $productName);
+        $productName = $dom->find($productNameSelector)[0]->text();
 
+        if ($source == 'www.rdveikals.lv') {
+            $productImage = 'https://www.rdveikals.lv/' . $dom->find($imageSelector)[3]->getAttribute('src');
+        } else {
+            $productImage = $dom->find($imageSelector)[0]->getAttribute('src');
+        }
+
+        $productName = $this->escapeCRLF($productName);
+        $this->downloadProductImage($productImage, $productName);
         $product = $this->productDetailsModel->where('product_url', $this->productDetailsModel->product_url)->get();
 
         if (!isset($product[0])) {
-            $this->productDetailsModel->product_name = $productName;
-            $this->productDetailsModel->product_image_url = strtolower(str_replace([' ', '/'], '-', $productName)) . '.png';
+            $this->productDetailsModel->product_name = str_replace(self::ESCAPE_RUS, '', $productName);
+            $this->productDetailsModel->product_image_url = strtolower(str_replace([' ', '/'], '-', $productName))
+                . '.png';
             $this->productDetailsModel->save();
         } else {
             $this->productDetailsModel = $product[0];
         }
     }
 
-    /**
-     * @param $url
-     * @param $productName
-     */
-    public function downloadProductImage($url, $productName)
+    public function rdParsePrice($dom)
     {
-        Storage::download($url);
-        $fileName = strtolower(str_replace([' ', '/'], '-', $productName));
-        $imageDirectory = storage_path('app/public') . '/' . $fileName . '.png';
+        $productPrice = $dom->find('.price');
 
-        if (!file_exists(storage_path('app/public') . '/' . $fileName . '.png')) {
-            file_put_contents($imageDirectory, file_get_contents($url));
+        if (!empty($productPrice)) {
+            $productPrice = $productPrice[0]->text();
+            preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productPrice), $result);
+            $productPrice = implode('.', str_replace(' ', '', $result[0]));
+            $currency = $this->checkCurrency($dom->find('.price')[0]->text());
+            $this->productPriceModel->product_relation_id = $this->productDetailsModel->id;
+            $this->productPriceModel->product_price = $productPrice;
+            $this->productPriceModel->currency = $currency;
         }
+
+        $this->productPriceModel->save();
     }
 
     /**
@@ -186,6 +211,20 @@ class ParseProductController extends Controller
         }
 
         $this->productPriceModel->save();
+    }
+
+    /**
+     * @param $url
+     * @param $productName
+     */
+    public function downloadProductImage($url, $productName)
+    {
+        $fileName = str_replace(self::ESCAPE_RUS, '', strtolower(str_replace([' ', '/'], '-', $productName)));
+        $imageDirectory = storage_path('app/public') . '/' . $fileName . '.png';
+
+        if (!file_exists(storage_path('app/public') . '/' . $fileName . '.png')) {
+            file_put_contents($imageDirectory, file_get_contents($url));
+        }
     }
 
     /**

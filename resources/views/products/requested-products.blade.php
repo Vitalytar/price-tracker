@@ -1,5 +1,8 @@
 @section('pageTitle', 'Manis pieprasītie produkti')
 @extends('layouts/app')
+@section('js')
+    <script src="{{ asset('js/layout-switcher.js') }}"></script>
+@endsection
 @section('content')
     <?php
     $escapeLatvian = [

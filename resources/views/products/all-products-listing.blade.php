@@ -1,7 +1,6 @@
 @section('pageTitle', 'Visi produkti')
 @extends('layouts/app')
 @section('js')
-{{--    @include('js/layout-switcher.js')--}}
     <script src="{{ asset('js/layout-switcher.js') }}"></script>
 @endsection
 @section('content')
