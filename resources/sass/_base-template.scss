@@ -1,10 +1,25 @@
 body {
     font-family: $f-base-font-family;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+
+    #app {
+        flex: 1;
+    }
+
+    footer {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+
+        .container-fluid {
+            max-width: 1280px;
+        }
+    }
 }
 
 main.page-content {
     max-width: 1280px;
-    margin: 70px auto 50px auto;
+    margin: 90px auto 50px auto;
     padding: 0 25px;
 
     .welcome-title-box {
