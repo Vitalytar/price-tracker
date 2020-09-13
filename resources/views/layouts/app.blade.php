@@ -38,8 +38,8 @@
                     </ul>
                     <ul class="navbar-nav search">
                         <div class="search-box">
-                            <form role="search" method="GET" action="#">
-                                <input id="search" type="search" placeholder="<?= __('Meklēt...') ?>" autofocus required />
+                            <form id="search-form" role="search" method="GET" action="{{ route('search') }}">
+                                <input id="search-input" name="query" type="search" placeholder="<?= __('Meklēt...') ?>" autofocus required />
                                 <button type="submit"><i class="fas fa-arrow-right"></i></button>
                             </form>
                         </div>

@@ -26,6 +26,7 @@ Auth::routes();
 Route::post('/parse-product', 'ParseProductController@parse')->name('parse-product');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('product/{productId}/{productName}', ['uses' => 'ProductPageController@showProduct'])->name('product-page');
+Route::get('/search', 'SearchController@searchResults')->name('search');
 
 // ==================== PAGES ====================
 Route::get('/check-product-price', function () {
