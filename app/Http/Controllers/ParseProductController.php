@@ -138,7 +138,8 @@ class ParseProductController extends Controller
             [
                 'status' => __('Produkta dati veiksmīgi tika paņemti un saglabāti!'),
                 'main_data' => $this->productData,
-                'price_data' => $productPrices
+                'price_data' => $productPrices,
+                'source_url' => $this->productDetailsModel->product_url
             ]
         );
     }

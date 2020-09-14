@@ -1,5 +1,5 @@
-@section('pageTitle', 'Manis pieprasītie produkti')
 @extends('layouts/app')
+@section('pageTitle', 'Manis pieprasītie produkti')
 @section('js')
     <script src="{{ asset('js/layout-switcher.js') }}"></script>
 @endsection
@@ -20,6 +20,7 @@
         <div class="all-products grid-view">
             @foreach ($products as $product)
                 <div class="product-item">
+                    <i class="fas fa-times delete-requested-item"></i>
                     <a href="<?= route(
                         'product-page', [
                         'productName' => strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian),

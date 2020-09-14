@@ -1,5 +1,5 @@
 @section('pageTitle','Homepage')
-@extends('layouts/app')
+@extends('layouts.app')
 @section('content')
     <div class="welcome-title-box">
         <h1>Welcome!</h1>

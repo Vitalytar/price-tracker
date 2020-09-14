@@ -59,8 +59,27 @@
         max-width: 400px;
     }
 
-    .table.product-info-table {
-        margin: 0 auto;
+    .product-detailed-info {
         width: 50%;
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+
+            .link-to-product {
+                display: flex;
+                align-self: center;
+
+                a {
+                    color: black;
+                    text-transform: none;
+                }
+            }
+        }
+
+        .table.product-info-table {
+            margin: 0 auto;
+        }
     }
 }

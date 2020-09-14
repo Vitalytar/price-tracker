@@ -17,20 +17,34 @@
             <div class="product-details">
                 <img class="product-main-image" src="{{ asset('storage/' . $productData['product_image']) }}"
                      alt="product_image">
-                <table class="table table-striped product-info-table">
-                    <thead>
-                    <th><?= __('Datums') ?></th>
-                    <th><?= __('Cena') ?></th>
-                    </thead>
-                    <tbody>
-                    @foreach ($priceData as $price)
-                        <tr>
-                            <td><?= $price['date'] ?></td>
-                            <td><?= $price['price'] . $price['currency'] ?></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                <div class="product-detailed-info">
+                    <div class="product-actions">
+                        <div class="link-to-product">
+                            <a href="<?= session('source_url') ?>" target="_blank"><?= __('Apskatīt produktu') ?></a>
+                        </div>
+                        <div class="actual-price-parse">
+                            <form method="POST" action="<?= route('parse-product') ?>">
+                                @csrf
+                                <input name="product-url" value="<?= session('source_url') ?>" type="hidden">
+                                <button type="submit"><?= __('Saņemt aktuālo cenu') ?></button>
+                            </form>
+                        </div>
+                    </div>
+                    <table class="table table-striped product-info-table">
+                        <thead>
+                        <th><?= __('Datums') ?></th>
+                        <th><?= __('Cena') ?></th>
+                        </thead>
+                        <tbody>
+                        @foreach ($priceData as $price)
+                            <tr>
+                                <td><?= $price['date'] ?></td>
+                                <td><?= $price['price'] . $price['currency'] ?></td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     @else
