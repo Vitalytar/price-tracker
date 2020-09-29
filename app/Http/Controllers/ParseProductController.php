@@ -102,9 +102,7 @@ class ParseProductController extends Controller
         $dom = $this->document->loadHtmlFile($request->input('product-url'));
 
         if ($sourceWeb == 'www.1a.lv') {
-            $this->parseProductData(
-                $dom, '.product-righter h1', '.product-gallery-slider__slide__inner img', $sourceWeb
-            );
+            $this->parseProductData($dom, '.product-righter h1', '.product-gallery-slider__slide__inner img', $sourceWeb);
             $this->parseAndSaveProductPrice($dom);
         } else {
             if ($sourceWeb == 'www.rdveikals.lv') {
@@ -144,6 +142,12 @@ class ParseProductController extends Controller
         );
     }
 
+    /**
+     * @param $dom
+     * @param $productNameSelector
+     * @param $imageSelector
+     * @param $source
+     */
     public function parseProductData($dom, $productNameSelector, $imageSelector, $source)
     {
         $productName = $dom->find($productNameSelector)[0]->text();
@@ -168,6 +172,9 @@ class ParseProductController extends Controller
         }
     }
 
+    /**
+     * @param $dom
+     */
     public function rdParsePrice($dom)
     {
         $productPrice = $dom->find('.price');
@@ -220,10 +227,12 @@ class ParseProductController extends Controller
      */
     public function downloadProductImage($url, $productName)
     {
-        $fileName = str_replace(self::ESCAPE_RUS, '', strtolower(str_replace([' ', '/'], '-', $productName)));
-        $imageDirectory = storage_path('app/public') . '/' . $fileName . '.png';
+        $fileName = str_replace(
+            self::ESCAPE_RUS, '', strtolower(str_replace([' ', '/'], '-', $productName))
+        );
+        $imageDirectory = storage_path('app' . DIRECTORY_SEPARATOR . 'public') . DIRECTORY_SEPARATOR . $fileName . '.png';
 
-        if (!file_exists(storage_path('app/public') . '/' . $fileName . '.png')) {
+        if (!file_exists(storage_path('app' . DIRECTORY_SEPARATOR . 'public') . DIRECTORY_SEPARATOR . $fileName . '.png')) {
             file_put_contents($imageDirectory, file_get_contents($url));
         }
     }
