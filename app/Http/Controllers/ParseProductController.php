@@ -87,8 +87,10 @@ class ParseProductController extends Controller
      */
     public function parse(Request $request)
     {
-        $this->productDetailsModel->product_url = $request->input('product-url');
-        $sourceWeb = parse_url($request->input('product-url'), PHP_URL_HOST);
+        // TODO: Check DB table using URL if product already exist and it shouldn't check image and other data
+        $productUrl = strtok($request->input('product-url'), '?');
+        $this->productDetailsModel->product_url = $productUrl;
+        $sourceWeb = parse_url($productUrl, PHP_URL_HOST);
         $this->productDetailsModel->source_web = $sourceWeb;
 
         if (!in_array($sourceWeb, self::AVAILABLE_WEBSITES)) {
@@ -99,7 +101,7 @@ class ParseProductController extends Controller
             );
         }
 
-        $dom = $this->document->loadHtmlFile($request->input('product-url'));
+        $dom = $this->document->loadHtmlFile($productUrl);
 
         if ($sourceWeb == 'www.1a.lv') {
             $this->parseProductData($dom, '.product-righter h1', '.product-gallery-slider__slide__inner img', $sourceWeb);
@@ -159,13 +161,12 @@ class ParseProductController extends Controller
         }
 
         $productName = $this->escapeCRLF($productName);
-        $this->downloadProductImage($productImage, $productName);
+        $fileName = $this->downloadProductImage($productImage, $productName);
         $product = $this->productDetailsModel->where('product_url', $this->productDetailsModel->product_url)->get();
 
         if (!isset($product[0])) {
             $this->productDetailsModel->product_name = str_replace(self::ESCAPE_RUS, '', $productName);
-            $this->productDetailsModel->product_image_url = strtolower(str_replace([' ', '/'], '-', $productName))
-                . '.png';
+            $this->productDetailsModel->product_image_url = $fileName;
             $this->productDetailsModel->save();
         } else {
             $this->productDetailsModel = $product[0];
@@ -227,14 +228,14 @@ class ParseProductController extends Controller
      */
     public function downloadProductImage($url, $productName)
     {
-        $fileName = str_replace(
-            self::ESCAPE_RUS, '', strtolower(str_replace([' ', '/'], '-', $productName))
-        );
-        $imageDirectory = storage_path('app' . DIRECTORY_SEPARATOR . 'public') . DIRECTORY_SEPARATOR . $fileName . '.png';
+        $fileName = preg_replace("/[^a-zA-Z0-9]+/", "", $productName) . '.png';
+        $imageDirectory = storage_path('app' . DIRECTORY_SEPARATOR . 'public') . DIRECTORY_SEPARATOR;
 
-        if (!file_exists(storage_path('app' . DIRECTORY_SEPARATOR . 'public') . DIRECTORY_SEPARATOR . $fileName . '.png')) {
-            file_put_contents($imageDirectory, file_get_contents($url));
+        if (!file_exists(storage_path('app' . DIRECTORY_SEPARATOR . 'public') . DIRECTORY_SEPARATOR . $fileName)) {
+            copy($url, $imageDirectory . $fileName);
         }
+
+        return $fileName;
     }
 
     /**
