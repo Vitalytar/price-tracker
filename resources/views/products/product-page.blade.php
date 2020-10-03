@@ -2,6 +2,12 @@
 @extends('layouts/app')
 @section('content')
     <?php $productName = $productMainData['product_name'] ?>
+    @if (session('status'))
+        <div class="alert alert-warning alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>{{ session('status') }}</strong>
+        </div>
+    @endif
     <div class="product-main-info">
         <div class="product-page-title">
             <?= $productName ?>

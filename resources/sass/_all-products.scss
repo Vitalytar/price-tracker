@@ -51,6 +51,21 @@
                 position: relative;
                 border-radius: var(--borderWidth);
 
+                form button[type="submit"].requested-product-deleting {
+                    background: transparent;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: black;
+                    height: 0;
+                    width: 0;
+
+                    &::before,
+                    &::after {
+                        content: none;
+                    }
+                }
+
                 .delete-requested-item {
                     position: absolute;
                     right: 15px;

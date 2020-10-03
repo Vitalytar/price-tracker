@@ -27,17 +27,14 @@ Route::post('/parse-product', 'ParseProductController@parse')->name('parse-produ
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('product/{productId}/{productName}', ['uses' => 'ProductPageController@showProduct'])->name('product-page');
 Route::get('/search', 'SearchController@searchResults')->name('search');
+Route::post('/delete-requested-product', 'ProductActions\DeleteRequestedProduct@deleteRequestedProduct')->name('delete-requested-product');
 
 // ==================== PAGES ====================
 Route::get('/check-product-price', function () {
-   return view('products/check-product-price');
+    return view('products/check-product-price');
 })->name('check-product-price');
 
-Route::get('/product-info', function () {
-    return view('products/product-info');
-})->name('product-info');
-
-Route::get('all-products', function() {
+Route::get('all-products', function () {
     $products = Product::inRandomOrder()->get();
 
     return view('products/all-products-listing', ['products' => $products]);

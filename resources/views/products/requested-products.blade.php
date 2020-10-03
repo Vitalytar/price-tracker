@@ -11,6 +11,12 @@
         'Ū' => 'ū', 'ū' => 'u', 'Ž' => 'z', 'ž' => 'z'
     ]
     ?>
+    @if (session('status'))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>{{ session('status') }}</strong>
+        </div>
+    @endif
     @if ($products->count() > 0)
         <h1><?= __('Visi iepriekš pieprasītie produkti') ?></h1>
         <div class="change-product-view">
@@ -20,7 +26,13 @@
         <div class="all-products grid-view">
             @foreach ($products as $product)
                 <div class="product-item">
-                    <i class="fas fa-times delete-requested-item"></i>
+                    <form method="POST" action="{{ route('delete-requested-product') }}">
+                        @csrf
+                        <input type="hidden" name="requested_product_id" value="<?= $product->requested_product_id ?>">
+                        <button type="submit" class="requested-product-deleting">
+                            <i id="delete-requested-item" class="fas fa-times delete-requested-item"></i>
+                        </button>
+                    </form>
                     <a href="<?= route(
                         'product-page', [
                         'productName' => strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian),

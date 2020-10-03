@@ -120,7 +120,7 @@ class ParseProductController extends Controller
         if ($product) {
             $this->productDetailsModel = $product->first();
 
-            if ($sourceWeb == 'www.1a.lv') {
+            if ($sourceWeb == 'www.1a.lv' || $sourceWeb == 'www.ksenukai.lv') {
                 $this->parseAndSaveProductPrice($dom);
             } else {
                 if ($sourceWeb == 'www.rdveikals.lv') {
@@ -128,7 +128,6 @@ class ParseProductController extends Controller
                 }
             }
 
-            $this->saveUserRequestData();
             $needToCreateProduct = false;
         }
 
@@ -145,26 +144,9 @@ class ParseProductController extends Controller
                     $this->rdParsePrice($dom);
                 }
             }
-
-            $this->saveUserRequestData();
-
-            $this->productData = [
-                'product_name' => $this->productDetailsModel->product_name,
-                'product_image' => $this->productDetailsModel->product_image_url
-            ];
-
-            $prices = $this->productPriceModel->where('product_relation_id', $this->productDetailsModel->id)
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-            foreach ($prices as $price) {
-                $productPrices[] = [
-                    'price' => $price->getAttribute('product_price'),
-                    'currency' => $price->getAttribute('currency'),
-                    'date' => $price->getAttributes()['created_at']
-                ];
-            }
         }
+
+        $this->saveUserRequestData();
 
         return redirect()->action(
             'ProductPageController@showProduct',
