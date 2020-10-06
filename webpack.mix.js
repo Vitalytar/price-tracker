@@ -15,5 +15,4 @@ mix.react('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
 
 mix.copy('resources/js/layout-switcher.js', 'public/js')
-    .copy('resources/images/logo.png', 'public/images')
-    .copy('resources/js/libs/canvasjs.min.js', 'public/js/libs');
+    .copy('resources/images/logo.png', 'public/images');
