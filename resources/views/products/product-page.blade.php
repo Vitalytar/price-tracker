@@ -32,13 +32,15 @@
                         </form>
                     </div>
                 </div>
-                <table class="table table-striped product-info-table">
+                <table class="table table-bordered product-info-table">
                     <thead>
                     <th><?= __('Datums') ?></th>
                     <th><?= __('Cena') ?></th>
                     </thead>
                     <tbody>
                     @foreach ($productPriceData as $priceData)
+                        <?php $chartPrices[] = $priceData['product_price'] ?>
+                        <?php $parseDates[] = '"' . $priceData['date'] . '"' ?>
                         <tr>
                             <td><?= $priceData['date'] ?></td>
                             <td><?= $priceData['product_price'] . $priceData['currency'] ?></td>
@@ -48,5 +50,23 @@
                 </table>
             </div>
         </div>
+        <canvas id="myChart" style="height: 30vw; width: 100vw;"></canvas>
+        <script>
+            var ctx = document.getElementById('myChart');
+            new Chart(document.getElementById("myChart"), {
+                "type": "line",
+                "data": {
+                    "labels": [<?= implode(', ', array_reverse($parseDates)) ?>],
+                    "datasets": [{
+                        "label": "<?= __('Cenu izmaiņas dinamika') ?>",
+                        "data": [<?= implode(', ', array_reverse($chartPrices)) ?>],
+                        "fill": false,
+                        "borderColor": "#000",
+                        "lineTension": 0.1
+                    }]
+                },
+                "options": {}
+            });
+        </script>
     </div>
 @endsection

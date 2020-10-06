@@ -47,8 +47,6 @@ main.page-content {
     }
 
     button[type='submit'] {
-        width: 220px;
-        height: 50px;
         border: none;
         outline: none;
         color: #fff;
@@ -59,6 +57,7 @@ main.page-content {
         border-radius: 10px;
         font-weight: 700;
         transition: transform .3s;
+        padding: 5px;
 
         &:hover {
             transform: scale(1.05);
