@@ -151,7 +151,7 @@ class ParseProductController extends Controller
         return redirect()->action(
             'ProductPageController@showProduct',
             [
-                'productName' => strtr(strtolower(str_replace([' ', ',', '/'], '-', $this->productDetailsModel->product_name)), self::ESCAPE_LATVIAN),
+                'productName' => str_replace('?', '', htmlentities(utf8_decode(strtr(strtolower(str_replace([' ', ',', '/'], '-', $this->productDetailsModel->product_name)), self::ESCAPE_LATVIAN)))),
                 'productId' => $this->productDetailsModel->id
             ]
         );
@@ -249,6 +249,7 @@ class ParseProductController extends Controller
         } else {
             $productNode = $dom->find('.product-price-details__block')[0]->text();
 
+            $productNode = str_replace('.', '', $productNode);
             preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productNode), $result);
             $productPrice = implode('.', $result[0]);
 

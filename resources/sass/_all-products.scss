@@ -118,6 +118,21 @@
             display: flex;
             flex-direction: column;
 
+            form button[type="submit"].requested-product-deleting {
+                background: transparent;
+                position: absolute;
+                right: 20px;
+                top: 10px;
+                color: black;
+                height: 0;
+                width: 0;
+
+                &::before,
+                &::after {
+                    content: none;
+                }
+            }
+
             .product-item {
                 display: flex;
                 flex-direction: row;

@@ -18,12 +18,11 @@
     </div>
     <div class="all-products grid-view">
         @foreach ($products as $product)
+            <?php $productLink = str_replace('--', '-', strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian)); ?>
             <div class="product-item">
                 <a href="<?= route(
                     'product-page', [
-                    'productName' => strtr(
-                        strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian
-                    ),
+                    'productName' => str_replace('?', '', htmlentities(utf8_decode($productLink))),
                     'productId' => $product->id
                 ]
                 ) ?>" class="link-to-product-page">
@@ -31,8 +30,9 @@
                          alt="product_image">
                     <div class="product-name"><?= $product->product_name ?></div>
                     <div class="link-to-product-source">
-                        <a href="<?= $product->product_url ?>" target="_blank"><?= __('Avots: ')
-                            . $product->source_web ?></a>
+                        <a href="<?= $product->product_url ?>" target="_blank">
+                            <?= __('Avots: ') . $product->source_web ?>
+                        </a>
                     </div>
                 </a>
             </div>

@@ -25,6 +25,7 @@
         </div>
         <div class="all-products grid-view">
             @foreach ($products as $product)
+                <?php $productLink = str_replace('--', '-', strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian)); ?>
                 <div class="product-item">
                     <form method="POST" action="{{ route('delete-requested-product') }}">
                         @csrf
@@ -35,7 +36,7 @@
                     </form>
                     <a href="<?= route(
                         'product-page', [
-                        'productName' => strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian),
+                        'productName' => str_replace('?', '', htmlentities(utf8_decode($productLink))),
                         'productId' => $product->id
                     ]
                     ) ?>" class="link-to-product-page">
