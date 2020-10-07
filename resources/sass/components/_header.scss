@@ -5,6 +5,18 @@
     --color-brand: #57bd84;
     --bez: cubic-bezier(0, 0, 0.43, 1.49);
 }
+@media screen and (max-width: 768px) {
+    .navbar {
+        .navbar-brand {
+            position: absolute;
+        }
+
+        .navbar-toggler {
+            position: absolute;
+            right: 20px;
+        }
+    }
+}
 
 .navbar {
     position: fixed;
@@ -13,6 +25,7 @@
     z-index: 15;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
     max-height: 70px;
+    height: 70px;
 
     .container {
         max-width: 1280px;
