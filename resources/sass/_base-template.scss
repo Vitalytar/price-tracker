@@ -3,6 +3,7 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    overflow-x: hidden;
 
     #app {
         flex: 1;
@@ -68,7 +69,7 @@ main.page-content {
             background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
             position: absolute;
             top: -2px;
-            left:-2px;
+            left: -2px;
             background-size: 400%;
             z-index: -1;
             filter: blur(5px);
@@ -106,8 +107,162 @@ main.page-content {
     }
 
     @keyframes glowing {
-        0% { background-position: 0 0; }
-        50% { background-position: 400% 0; }
-        100% { background-position: 0 0; }
+        0% {
+            background-position: 0 0;
+        }
+        50% {
+            background-position: 400% 0;
+        }
+        100% {
+            background-position: 0 0;
+        }
+    }
+}
+
+// Homepage background
+.homepage {
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Exo', sans-serif;
+
+        .navbar,
+        footer {
+            background-color: #4e54c8 !important;
+        }
+
+        .context {
+            width: 100%;
+            position: absolute;
+            top: 10vh;
+            margin-left: -25px;
+
+            h1 {
+                text-align: center;
+                color: #fff;
+                font-size: 50px;
+            }
+        }
+
+        .area {
+            background: #4e54c8;
+            background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
+            width: 100vw;
+            height: 100vh;
+            margin: -20px 0 -50px -25px;
+
+            .circles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+
+                li {
+                    position: absolute;
+                    display: block;
+                    list-style: none;
+                    width: 20px;
+                    height: 20px;
+                    background: rgba(255, 255, 255, 0.2);
+                    animation: animate 25s linear infinite;
+                    bottom: -150px;
+
+                    &:nth-child(1) {
+                        left: 25%;
+                        width: 80px;
+                        height: 80px;
+                        animation-delay: 0s;
+                    }
+
+                    &:nth-child(2) {
+                        left: 10%;
+                        width: 20px;
+                        height: 20px;
+                        animation-delay: 2s;
+                        animation-duration: 12s;
+                    }
+
+                    &:nth-child(3) {
+                        left: 70%;
+                        width: 20px;
+                        height: 20px;
+                        animation-delay: 4s;
+                    }
+
+                    &:nth-child(4) {
+                        left: 40%;
+                        width: 60px;
+                        height: 60px;
+                        animation-delay: 0s;
+                        animation-duration: 18s;
+                    }
+
+                    &:nth-child(5) {
+                        left: 65%;
+                        width: 20px;
+                        height: 20px;
+                        animation-delay: 0s;
+                    }
+
+                    &:nth-child(6) {
+                        left: 75%;
+                        width: 110px;
+                        height: 110px;
+                        animation-delay: 3s;
+                    }
+
+                    &:nth-child(7) {
+                        left: 35%;
+                        width: 150px;
+                        height: 150px;
+                        animation-delay: 7s;
+                    }
+
+                    &:nth-child(8) {
+                        left: 50%;
+                        width: 25px;
+                        height: 25px;
+                        animation-delay: 15s;
+                        animation-duration: 45s;
+                    }
+
+                    &:nth-child(9) {
+                        left: 20%;
+                        width: 15px;
+                        height: 15px;
+                        animation-delay: 2s;
+                        animation-duration: 35s;
+                    }
+
+                    &:nth-child(10) {
+                        left: 85%;
+                        width: 150px;
+                        height: 150px;
+                        animation-delay: 0s;
+                        animation-duration: 11s;
+                    }
+                }
+            }
+        }
+    }
+
+    @keyframes animate {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+            border-radius: 0;
+        }
+
+        100% {
+            transform: translateY(-1000px) rotate(720deg);
+            opacity: 0;
+            border-radius: 50%;
+        }
     }
 }

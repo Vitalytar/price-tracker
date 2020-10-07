@@ -5,6 +5,7 @@
     --color-brand: #57bd84;
     --bez: cubic-bezier(0, 0, 0.43, 1.49);
 }
+
 @media screen and (max-width: 768px) {
     .navbar {
         .navbar-brand {
@@ -14,6 +15,15 @@
         .navbar-toggler {
             position: absolute;
             right: 20px;
+        }
+
+        // Mobile menu dropdown
+        #navbarSupportedContent {
+            position: absolute;
+            background-color: #ffffff;
+            right: 0;
+            left: 0;
+            top: 100%;
         }
     }
 }

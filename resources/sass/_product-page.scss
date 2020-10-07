@@ -56,9 +56,10 @@
 
     .product-main-image {
         height: 100%;
-        width: 100%;
+        width: auto;
         max-height: 400px;
         max-width: 400px;
+        margin: auto;
     }
 
     .product-detailed-info {
