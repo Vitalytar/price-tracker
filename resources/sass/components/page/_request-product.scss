@@ -1,0 +1,20 @@
+.request-product {
+    .product-request-form {
+        display: flex;
+        flex-direction: column;
+
+        label {
+            text-align: center;
+            font-size: 22px;
+        }
+
+        input {
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        button[type="submit"] {
+            margin: 0 auto;
+        }
+    }
+}

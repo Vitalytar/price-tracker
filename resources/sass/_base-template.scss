@@ -121,15 +121,7 @@ main.page-content {
 
 // Homepage background
 .homepage {
-
-    * {
-        margin: 0;
-        padding: 0;
-    }
-
     body {
-        font-family: 'Exo', sans-serif;
-
         .navbar,
         footer {
             background-color: #4e54c8 !important;
@@ -140,20 +132,29 @@ main.page-content {
             position: absolute;
             top: 10vh;
             margin-left: -25px;
+            z-index: 1;
+            color: #fff;
+            text-align: center;
 
             h1 {
-                text-align: center;
-                color: #fff;
                 font-size: 50px;
+            }
+
+            .welcome-text {
+                font-size: 22px;
+                margin: 0 15px;
             }
         }
 
         .area {
             background: #4e54c8;
             background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
-            width: 100vw;
             height: 100vh;
-            margin: -20px 0 -50px -25px;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin: -20px -50vw -50px;
 
             .circles {
                 position: absolute;

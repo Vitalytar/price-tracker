@@ -1,5 +1,6 @@
 @section('pageTitle', "Meklēšanas rezultāti ({$products->count()})")
 @extends('layouts/app')
+@section('page-class', 'search-results')
 @section('js')
     <script src="{{ asset('js/layout-switcher.js') }}"></script>
 @endsection

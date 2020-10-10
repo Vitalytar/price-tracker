@@ -22,8 +22,9 @@
 @import 'components/footer';
 
 // Pages
-@import 'product-page';
-@import 'all-products';
+@import 'components/page/product-page';
+@import 'components/page/all-products';
+@import 'components/page/request-product';
 
 // Hover effects
 @import '~hover.css/css/hover.css';

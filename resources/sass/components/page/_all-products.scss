@@ -110,6 +110,11 @@
                     align-self: center;
                     max-height: 200px;
                     max-width: 200px;
+                    padding-bottom: 15px;
+
+                    &.placeholder-image {
+                        opacity: .2;
+                    }
                 }
             }
         }
@@ -168,6 +173,10 @@
 
                 .product-main-image {
                     max-width: 100px;
+
+                    &.placeholder-image {
+                        opacity: .2;
+                    }
                 }
             }
 

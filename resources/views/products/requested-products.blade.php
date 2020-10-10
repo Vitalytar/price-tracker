@@ -1,5 +1,6 @@
 @extends('layouts/app')
 @section('pageTitle', 'Manis pieprasītie produkti')
+@section('page-class', 'requested-products')
 @section('js')
     <script src="{{ asset('js/layout-switcher.js') }}"></script>
 @endsection
@@ -41,7 +42,12 @@
                     ]
                     ) ?>" class="link-to-product-page">
                         <img class="product-main-image" src="{{ asset('storage/' . $product->product_image_url) }}"
-                             alt="product_image">
+                             alt="product_image"
+                             onerror="
+                                 this.onerror=null; // Handle failed image load and replace it with a placeholder image
+                                 this.src='<?= asset('images/placeholder.png') ?>';
+                                 this.className='product-main-image placeholder-image'"
+                        >
                         <div class="product-name"><?= $product->product_name ?></div>
                         <div class="link-to-product-source">
                             <a href="<?= $product->product_url ?>" target="_blank"><?= __('Avots: ') . $product->source_web ?></a>

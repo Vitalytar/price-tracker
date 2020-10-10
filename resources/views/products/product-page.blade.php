@@ -1,5 +1,6 @@
 @section('pageTitle', $productMainData['product_name'])
 @extends('layouts/app')
+@section('page-class', 'product-page')
 @section('content')
     <?php $productName = $productMainData['product_name'] ?>
     @if (session('status'))

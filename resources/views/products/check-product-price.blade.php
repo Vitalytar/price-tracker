@@ -1,5 +1,6 @@
 @section('pageTitle','Pārbaudīt produkta cenu')
 @extends('layouts/app')
+@section('page-class', 'request-product')
 @section('content')
     @if (session('warning'))
         <div class="alert alert-warning alert-block">
@@ -7,7 +8,7 @@
             <strong>{{ session('warning') }}</strong>
         </div>
     @endif
-    <form method="POST" action="<?= route('parse-product') ?>">
+    <form class="product-request-form" method="POST" action="<?= route('parse-product') ?>">
         @csrf
         <label for="product-url">Ievadiet produkta linku lai dabūtu cenu izmaiņu grafiku</label>
             <input type="url" name="product-url" minlength="3" required>
