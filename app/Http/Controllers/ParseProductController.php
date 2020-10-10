@@ -7,6 +7,7 @@ use DiDom\Document;
 use App\ProductPrice;
 use App\Product;
 use App\UserProductRequest;
+use App\Trlprice\Parsers\PriceParsers;
 
 /**
  * Class ParseProductController
@@ -24,7 +25,8 @@ class ParseProductController extends Controller
     const AVAILABLE_WEBSITES = [
         'www.1a.lv',
         'www.rdveikals.lv',
-        'www.ksenukai.lv'
+        'www.ksenukai.lv',
+        'www.dateks.lv'
     ];
 
     const ESCAPE_RUS = [
@@ -71,6 +73,11 @@ class ParseProductController extends Controller
     protected $request;
 
     /**
+     * @var PriceParsers
+     */
+    protected $priceParser;
+
+    /**
      * ParseProductController constructor.
      *
      * @param Document           $document
@@ -78,23 +85,26 @@ class ParseProductController extends Controller
      * @param Product            $productDetailsModel
      * @param UserProductRequest $userRequestedProductModel
      * @param Request            $request
+     * @param PriceParsers       $priceParser
      */
     public function __construct(
         Document $document,
         ProductPrice $productPriceModel,
         Product $productDetailsModel,
         UserProductRequest $userRequestedProductModel,
-        Request $request
+        Request $request,
+        PriceParsers $priceParser
     ) {
         $this->document = $document;
         $this->productPriceModel = $productPriceModel;
         $this->productDetailsModel = $productDetailsModel;
         $this->userRequestedProductModel = $userRequestedProductModel;
         $this->request = $request;
+        $this->priceParser = $priceParser;
     }
 
     /**
-     * Parse necessary URL and gather necessary info about product
+     * Parse all necessary product data and download image
      *
      * @param Request $request
      *
@@ -119,13 +129,14 @@ class ParseProductController extends Controller
 
         if ($product) {
             $this->productDetailsModel = $product->first();
+            $productId = $this->productDetailsModel->id;
 
             if ($sourceWeb == 'www.1a.lv' || $sourceWeb == 'www.ksenukai.lv') {
-                $this->parseAndSaveProductPrice($dom);
-            } else {
-                if ($sourceWeb == 'www.rdveikals.lv') {
-                    $this->rdParsePrice($dom);
-                }
+                $this->priceParser->parse1aPrice($dom, $productId);
+            } elseif ($sourceWeb == 'www.rdveikals.lv') {
+                $this->priceParser->parseRdPrice($dom, $productId);
+            } elseif ($sourceWeb == 'www.dateks.lv') {
+                $this->priceParser->parseDateksPrice($dom, $productId);
             }
 
             $needToCreateProduct = false;
@@ -137,12 +148,13 @@ class ParseProductController extends Controller
 
             if ($sourceWeb == 'www.1a.lv' || $sourceWeb == 'www.ksenukai.lv') {
                 $this->parseProductData($dom, '.product-righter h1', '.product-gallery-slider__slide__inner img', $sourceWeb);
-                $this->parseAndSaveProductPrice($dom);
-            } else {
-                if ($sourceWeb == 'www.rdveikals.lv') {
-                    $this->parseProductData($dom, 'h1', 'img', $sourceWeb);
-                    $this->rdParsePrice($dom);
-                }
+                $this->priceParser->parse1aPrice($dom, $this->productDetailsModel->id);
+            } elseif ($sourceWeb == 'www.rdveikals.lv') {
+                $this->parseProductData($dom, 'h1', 'img', $sourceWeb);
+                $this->priceParser->parseRdPrice($dom, $this->productDetailsModel->id);
+            } elseif ($sourceWeb == 'www.dateks.lv') {
+                $this->parseProductData($dom, 'h1.name', 'img', $sourceWeb);
+                $this->priceParser->parseDateksPrice($dom, $this->productDetailsModel->id);
             }
         }
 
@@ -157,6 +169,9 @@ class ParseProductController extends Controller
         );
     }
 
+    /**
+     * Save data about requested product by user to database
+     */
     public function saveUserRequestData()
     {
         $this->userRequestedProductModel->user_id = ($this->request->user()) ? $this->request->user()->id : 0;
@@ -193,8 +208,10 @@ class ParseProductController extends Controller
 
         if ($source == 'www.rdveikals.lv') {
             $productImage = 'https://www.rdveikals.lv/' . $dom->find($imageSelector)[3]->getAttribute('src');
-        } else {
+        } elseif ($source == 'www.1a.lv' || $source == 'www.ksenukai.lv') {
             $productImage = $dom->find($imageSelector)[0]->getAttribute('src');
+        } elseif ($source == 'www.dateks.lv') {
+            $productImage = 'https://' . $source . $dom->find($imageSelector)[0]->getAttribute('src');
         }
 
         $productName = $this->escapeCRLF($productName);
@@ -208,56 +225,6 @@ class ParseProductController extends Controller
         } else {
             $this->productDetailsModel = $product[0];
         }
-    }
-
-    /**
-     * @param $dom
-     */
-    public function rdParsePrice($dom)
-    {
-        $productPrice = $dom->find('.price');
-
-        if (!empty($productPrice)) {
-            $productPrice = $productPrice[0]->text();
-            preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productPrice), $result);
-            $productPrice = implode('.', str_replace(' ', '', $result[0]));
-            $currency = $this->checkCurrency($dom->find('.price')[0]->text());
-            $this->productPriceModel->product_relation_id = $this->productDetailsModel->id;
-            $this->productPriceModel->product_price = $productPrice;
-            $this->productPriceModel->currency = $currency;
-        }
-
-        $this->productPriceModel->save();
-    }
-
-    /**
-     * @param $dom
-     */
-    public function parseAndSaveProductPrice($dom)
-    {
-        $productNode = $dom->find('.product-price-details__price');
-
-        if (!empty($productNode)) {
-            $productNode = $productNode[0]->text();
-            preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productNode), $result);
-            $productPrice = implode('.', $result[0]);
-            $currency = $this->checkCurrency($productNode);
-
-            $this->productPriceModel->product_relation_id = $this->productDetailsModel->id;
-            $this->productPriceModel->product_price = $productPrice;
-            $this->productPriceModel->currency = $currency;
-        } else {
-            $productNode = $dom->find('.product-price-details__block')[0]->text();
-
-            $productNode = str_replace('.', '', $productNode);
-            preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productNode), $result);
-            $productPrice = implode('.', $result[0]);
-
-            $this->productPriceModel->product_relation_id = $this->productDetailsModel->id;
-            $this->productPriceModel->product_price = $productPrice;
-        }
-
-        $this->productPriceModel->save();
     }
 
     /**
@@ -276,20 +243,6 @@ class ParseProductController extends Controller
         }
 
         return $fileName;
-    }
-
-    /**
-     * @param $productNode
-     *
-     * @return mixed
-     */
-    public function checkCurrency($productNode)
-    {
-        foreach (self::CURRENCIES as $currency) {
-            if (strpos($productNode, $currency)) {
-                return $currency;
-            }
-        }
     }
 
     /**
