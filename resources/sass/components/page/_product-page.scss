@@ -83,6 +83,10 @@
 
         .table.product-info-table {
             margin: 0 auto;
+
+            &.loader {
+                background: rgba(0, 0, 0, .2) url('../images/loader.gif') no-repeat center center;
+            }
         }
     }
 }

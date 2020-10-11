@@ -28,6 +28,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('product/{productId}/{productName}', ['uses' => 'ProductPageController@showProduct'])->name('product-page');
 Route::get('/search', 'SearchController@searchResults')->name('search');
 Route::post('/delete-requested-product', 'ProductActions\DeleteRequestedProduct@deleteRequestedProduct')->name('delete-requested-product');
+Route::post('/ajax-product-price-update', 'ProductActions\AjaxDataUpdate@updateProductPrice')->name('update-product-price');
 
 // ==================== PAGES ====================
 Route::get('/check-product-price', function () {

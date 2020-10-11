@@ -113,7 +113,7 @@ class ParseProductController extends Controller
     public function parse(Request $request)
     {
         $needToCreateProduct = true;
-        $productUrl = strtok($request->input('product-url'), '?');
+        $productUrl = strtok($request->input('productUrl'), '?');
         $product = $this->checkIfProductExist($productUrl);
         $sourceWeb = parse_url($productUrl, PHP_URL_HOST);
 

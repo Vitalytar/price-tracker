@@ -28,12 +28,12 @@
                     <div class="actual-price-parse">
                         <form method="POST" action="<?= route('parse-product') ?>">
                             @csrf
-                            <input name="product-url" value="<?= $productMainData['product_url'] ?>" type="hidden">
+                            <input name="productUrl" value="<?= $productMainData['product_url'] ?>" type="hidden">
                             <button type="submit"><?= __('Saņemt aktuālo cenu') ?></button>
                         </form>
                     </div>
                 </div>
-                <table class="table table-bordered product-info-table">
+                <table id="product-data-table" class="table table-bordered product-info-table">
                     <thead>
                     <th><?= __('Datums') ?></th>
                     <th><?= __('Cena') ?></th>
@@ -67,6 +67,39 @@
                     }]
                 },
                 "options": {}
+            });
+        </script>
+        <script type="text/javascript">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('button[type="submit"]').click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('update-product-price') }}",
+                    data: {
+                        productUrl: $("input[name=productUrl]").val()
+                    },
+                    beforeSend: function () {
+                        $('#product-data-table').addClass('loader');
+                    },
+                    complete: function () {
+                        $('#product-data-table').removeClass('loader');
+                    },
+                    success: function (data) {
+                        let table = $('#product-data-table').find('tbody')[0];
+                        let newRow = table.insertRow(0);
+                        let dateCell = newRow.insertCell(0);
+                        let priceCell = newRow.insertCell(1);
+                        dateCell.innerHTML = data.date;
+                        priceCell.innerHTML = data.productPrice + data.currency;
+                    }
+                });
             });
         </script>
     </div>

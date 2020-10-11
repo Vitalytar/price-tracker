@@ -60,6 +60,8 @@ class PriceParsers
         }
 
         $this->productPriceModel->save();
+
+        return $this->productPriceModel;
     }
 
     /**
@@ -83,6 +85,8 @@ class PriceParsers
         }
 
         $this->productPriceModel->save();
+
+        return $this->productPriceModel;
     }
 
     /**
@@ -106,6 +110,8 @@ class PriceParsers
         }
 
         $this->productPriceModel->save();
+
+        return $this->productPriceModel;
     }
 
     /**
