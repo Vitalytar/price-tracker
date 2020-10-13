@@ -8,7 +8,6 @@
                     <?= __('Sazināties') ?>
                 </div>
             </div>
-            <hr class="clearfix w-100 d-md-none pb-3">
         </div>
     </div>
     <div class="footer-copyright text-center py-3">© 2020 Copyright:
