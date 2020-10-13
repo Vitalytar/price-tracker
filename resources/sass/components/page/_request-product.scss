@@ -10,11 +10,52 @@
 
         input {
             border-radius: 5px;
-            margin: 20px 0;
+            margin: 20px 0 5px;
+        }
+
+        small {
+            opacity: .4;
         }
 
         button[type="submit"] {
             margin: 0 auto;
+        }
+    }
+
+    @media only screen and (min-width: 300px) {
+        .parse-instruction-block {
+            border-top: 1px solid #000000;
+            margin-top: 40px;
+
+            .instruction-wrapper {
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+
+                .instruction {
+                    ol {
+                        padding-left: 0;
+                    }
+                }
+
+                .available-resources {
+                    padding: 20px;
+                    background-color: #2098D1;
+                    color: white;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
+    @media only screen and (min-width: 768px) {
+        .parse-instruction-block {
+            .instruction-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                margin: 0 50px;
+                text-align: left;
+            }
         }
     }
 }
