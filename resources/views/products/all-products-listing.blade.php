@@ -40,6 +40,11 @@
                             <?= __('Avots: ') . $product->source_web ?>
                         </a>
                     </div>
+                    <form method="POST" action="<?= route('parse-product') ?>">
+                        @csrf
+                        <input name="productUrl" value="<?= $product->product_url ?>" type="hidden">
+                        <button type="submit"><?= __('Saņemt aktuālo cenu') ?></button>
+                    </form>
                 </a>
             </div>
         @endforeach
