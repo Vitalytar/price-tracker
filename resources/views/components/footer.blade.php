@@ -2,10 +2,10 @@
     <div class="container-fluid text-center text-md-left">
         <div class="row">
             <div class="col-md-6 mt-md-0 mt-3 contact-form-section">
-                <h5 class="text-uppercase"><?= __('Kontaktforma') ?></h5>
-                <p><?= __('Mēs jums atbildēsim cik ātri vien iespējams.') ?></p>
+                <h5 class="text-uppercase"><?= __('Jūsu ieteikumi') ?></h5>
+                <p><?= __('Mēs priecāsimies par katru iesūtīto ieteikumu un labprāt apsvērsim katru') ?></p>
                 <div class="cf-form trigger-modal">
-                    <?= __('Sazināties') ?>
+                    <?= __('Nosūtīt ieteikumu') ?>
                 </div>
             </div>
         </div>
