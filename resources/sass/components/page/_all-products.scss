@@ -51,6 +51,28 @@
                 position: relative;
                 border-radius: var(--borderWidth);
 
+                .like-item {
+                    position: absolute;
+                    top: 10px;
+                    left: 15px;
+                    cursor: pointer;
+                    color: red;
+
+                    .liked {
+                        display: none;
+                    }
+
+                    &.active {
+                        .not-liked {
+                            display: none;
+                        }
+
+                        .liked {
+                            display: block;
+                        }
+                    }
+                }
+
                 form button[type="submit"].requested-product-deleting {
                     background: transparent;
                     position: absolute;

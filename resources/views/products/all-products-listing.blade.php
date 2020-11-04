@@ -21,6 +21,10 @@
         @foreach ($products as $product)
             <?php $productLink = str_replace('--', '-', strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian)); ?>
             <div class="product-item">
+                <div class="like-item">
+                    <i class="far fa-heart fa-lg not-liked"></i>
+                    <i class="fas fa-heart fa-lg liked"></i>
+                </div>
                 <a href="<?= route(
                     'product-page', [
                     'productName' => str_replace('?', '', htmlentities(utf8_decode($productLink))),
