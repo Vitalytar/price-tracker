@@ -57,6 +57,7 @@
                     left: 15px;
                     cursor: pointer;
                     color: red;
+                    transition: background-color .5s;
 
                     .liked {
                         display: none;

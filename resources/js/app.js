@@ -15,3 +15,4 @@ require('./bootstrap');
 require('./components/Example');
 window.Jquery = require('jquery');
 window.Chart = require('chart.js');
+import 'jquery-ui/ui/widgets/dialog';

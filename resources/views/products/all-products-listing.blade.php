@@ -21,7 +21,7 @@
         @foreach ($products as $product)
             <?php $productLink = str_replace('--', '-', strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian)); ?>
             <div class="product-item">
-                <div class="like-item">
+                <div class="like-item" data-product-id="<?= $product->id ?>">
                     <i class="far fa-heart fa-lg not-liked"></i>
                     <i class="fas fa-heart fa-lg liked"></i>
                 </div>
@@ -53,4 +53,58 @@
             </div>
         @endforeach
     </div>
+    <script type="text/javascript">
+        $('.like-item').on('click', function () {
+            $(this).addClass('active');
+            let productId = $(this).attr('data-product-id');
+
+            $('<div></div>').appendTo('body')
+            .html('<div><h6>' + '<?= __('Vai Jūs vēlaties ieslēgt paziņojumus par šī produkta cenas izmiņām?') ?>' + '</h6></div>')
+            .dialog({
+                modal: true,
+                title: 'Ieslēgt paziņojumus',
+                zIndex: 1000,
+                autoOpen: true,
+                width: 'auto',
+                resizable: 'false',
+                buttons: {
+                    Jā: function () {
+                        $(this).remove();
+                        addLikedItem(productId, true);
+                    },
+                    Nē: function() {
+                        addLikedItem(productId, false);
+                        $(this).remove();
+                    }
+                }
+            });
+        });
+
+        function addLikedItem(productId, notify) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('save-liked-product') }}",
+                data: {
+                    productId: productId,
+                    notify: notify
+                },
+                beforeSend: function () {
+                    $(this).addClass('loader');
+                },
+                complete: function () {
+                    $('#product-data-table').removeClass('loader');
+                },
+                success: function (data) {
+                    console.log('success!');
+                    console.log(data);
+                }
+            })
+        }
+    </script>
 @endsection

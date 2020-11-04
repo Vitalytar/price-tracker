@@ -29,6 +29,7 @@ Route::get('product/{productId}/{productName}', ['uses' => 'ProductPageControlle
 Route::get('/search', 'SearchController@searchResults')->name('search');
 Route::post('/delete-requested-product', 'ProductActions\DeleteRequestedProduct@deleteRequestedProduct')->name('delete-requested-product');
 Route::post('/ajax-product-price-update', 'ProductActions\AjaxDataUpdate@updateProductPrice')->name('update-product-price');
+Route::post('/ajax-liked-product-save', 'ProductActions\LikeProduct@saveLikedProduct')->name('save-liked-product');
 
 // ==================== PAGES ====================
 Route::get('/check-product-price', function () {
