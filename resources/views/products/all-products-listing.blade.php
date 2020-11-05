@@ -21,10 +21,12 @@
         @foreach ($products as $product)
             <?php $productLink = str_replace('--', '-', strtr(strtolower(str_replace([' ', ',', '/'], '-', $product->product_name)), $escapeLatvian)); ?>
             <div class="product-item">
+                @auth
                 <div class="like-item" data-product-id="<?= $product->id ?>">
                     <i class="far fa-heart fa-lg not-liked"></i>
                     <i class="fas fa-heart fa-lg liked"></i>
                 </div>
+                @endauth
                 <a href="<?= route(
                     'product-page', [
                     'productName' => str_replace('?', '', htmlentities(utf8_decode($productLink))),
@@ -55,8 +57,8 @@
     </div>
     <script type="text/javascript">
         $('.like-item').on('click', function () {
-            $(this).addClass('active');
-            let productId = $(this).attr('data-product-id');
+            let currentProduct = $(this),
+                productId = $(this).attr('data-product-id');
 
             $('<div></div>').appendTo('body')
             .html('<div><h6>' + '<?= __('Vai Jūs vēlaties ieslēgt paziņojumus par šī produkta cenas izmiņām?') ?>' + '</h6></div>')
@@ -70,17 +72,17 @@
                 buttons: {
                     Jā: function () {
                         $(this).remove();
-                        addLikedItem(productId, true);
+                        addLikedItem(productId, 1, currentProduct);
                     },
                     Nē: function() {
-                        addLikedItem(productId, false);
+                        addLikedItem(productId, 0, currentProduct);
                         $(this).remove();
                     }
                 }
             });
         });
 
-        function addLikedItem(productId, notify) {
+        function addLikedItem(productId, notify, currentProduct) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -95,13 +97,14 @@
                     notify: notify
                 },
                 beforeSend: function () {
-                    $(this).addClass('loader');
+                    currentProduct.parent().addClass('loader');
                 },
                 complete: function () {
-                    $('#product-data-table').removeClass('loader');
+                    currentProduct.parent().removeClass('loader');
                 },
                 success: function (data) {
-                    console.log('success!');
+                    currentProduct.addClass('active');
+                    // TODO: append message about successful save
                     console.log(data);
                 }
             })
