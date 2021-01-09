@@ -55,14 +55,16 @@
     }
 
     .product-main-image {
-        height: 100%;
-        width: auto;
         max-height: 400px;
         max-width: 400px;
         margin: auto;
+        width: auto;
     }
 
     .product-detailed-info {
+        max-height: 315px;
+        overflow-x: hidden;
+        overflow-y: scroll;
         width: 50%;
 
         .product-actions {
@@ -86,6 +88,21 @@
 
             &.loader {
                 background: rgba(0, 0, 0, .2) url('../images/loader.gif') no-repeat center center;
+            }
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .product-details {
+            flex-direction: column;
+
+            .product-main-image {
+                max-width: 100%;
+            }
+
+            .product-detailed-info {
+                margin: 25px auto 0 auto;
+                width: 100%;
             }
         }
     }

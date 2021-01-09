@@ -51,7 +51,13 @@ class PriceParsers
             $this->productPriceModel->product_price = $productPrice;
             $this->productPriceModel->currency = $currency;
         } else {
-            $productNode = $dom->find('.product-price-details__block')[0]->text();
+            $productNode = $dom->find('.product-price-details__block');
+
+            if (empty($productNode)) {
+                return null;
+            }
+
+            $productNode = $productNode[0]->text();
             $productNode = str_replace('.', '', $productNode);
             preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productNode), $result);
             $productPrice = implode('.', $result[0]);
