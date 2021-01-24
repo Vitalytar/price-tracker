@@ -64,7 +64,7 @@
     .product-detailed-info {
         max-height: 315px;
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
         width: 50%;
 
         .product-actions {
@@ -80,6 +80,10 @@
                     color: black;
                     text-transform: none;
                 }
+            }
+
+            .actual-price-parse {
+                padding: 10px 15px 0 0;
             }
         }
 

@@ -147,7 +147,7 @@ class ParseProductController extends Controller
             $this->productDetailsModel->source_web = $sourceWeb;
 
             if ($sourceWeb == 'www.1a.lv' || $sourceWeb == 'www.ksenukai.lv') {
-                $this->parseProductData($dom, '.product-righter h1', '.product-gallery-slider__slide__inner img', $sourceWeb);
+                $this->parseProductData($dom, '.product-righter h1', '.products-gallery-slider__slide-inner img', $sourceWeb);
                 $this->priceParser->parse1aPrice($dom, $this->productDetailsModel->id);
             } elseif ($sourceWeb == 'www.rdveikals.lv') {
                 $this->parseProductData($dom, 'h1', 'img', $sourceWeb);
