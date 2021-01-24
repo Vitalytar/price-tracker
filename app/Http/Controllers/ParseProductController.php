@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DiDom\Document;
-use App\ProductPrice;
 use App\Product;
 use App\UserProductRequest;
 use App\Trlprice\Parsers\PriceParsers;
@@ -48,11 +47,6 @@ class ParseProductController extends Controller
     protected $document;
 
     /**
-     * @var ProductPrice
-     */
-    protected $productPriceModel;
-
-    /**
      * @var Product
      */
     protected $productDetailsModel;
@@ -81,7 +75,6 @@ class ParseProductController extends Controller
      * ParseProductController constructor.
      *
      * @param Document           $document
-     * @param ProductPrice       $productPriceModel
      * @param Product            $productDetailsModel
      * @param UserProductRequest $userRequestedProductModel
      * @param Request            $request
@@ -89,14 +82,12 @@ class ParseProductController extends Controller
      */
     public function __construct(
         Document $document,
-        ProductPrice $productPriceModel,
         Product $productDetailsModel,
         UserProductRequest $userRequestedProductModel,
         Request $request,
         PriceParsers $priceParser
     ) {
         $this->document = $document;
-        $this->productPriceModel = $productPriceModel;
         $this->productDetailsModel = $productDetailsModel;
         $this->userRequestedProductModel = $userRequestedProductModel;
         $this->request = $request;
@@ -131,12 +122,17 @@ class ParseProductController extends Controller
             $this->productDetailsModel = $product->first();
             $productId = $this->productDetailsModel->id;
 
-            if ($sourceWeb == 'www.1a.lv' || $sourceWeb == 'www.ksenukai.lv') {
-                $this->priceParser->parse1aPrice($dom, $productId);
-            } elseif ($sourceWeb == 'www.rdveikals.lv') {
-                $this->priceParser->parseRdPrice($dom, $productId);
-            } elseif ($sourceWeb == 'www.dateks.lv') {
-                $this->priceParser->parseDateksPrice($dom, $productId);
+            switch ($sourceWeb) {
+                case 'www.1a.lv':
+                case 'www.ksenukai.lv':
+                    $this->priceParser->parse1aPrice($dom, $productId);
+                    break;
+                case 'www.rdveikals.lv':
+                    $this->priceParser->parseRdPrice($dom, $productId);
+                    break;
+                case 'www.dateks.lv':
+                    $this->priceParser->parseDateksPrice($dom, $productId);
+                    break;
             }
 
             $needToCreateProduct = false;
