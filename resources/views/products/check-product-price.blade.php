@@ -31,6 +31,7 @@
                 <div class="available-resource">RD veikals</div>
                 <div class="available-resource">Dateks</div>
                 <div class="available-resource">Ksenukai</div>
+                <div class="available-resource">Tet</div>
             </div>
         </div>
     </div>

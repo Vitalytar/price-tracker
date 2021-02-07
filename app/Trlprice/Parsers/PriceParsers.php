@@ -32,11 +32,32 @@ class PriceParsers
         $this->productPriceModel = $productPriceModel;
     }
 
+    public function parseTetPrice($dom, $productId)
+    {
+        $productNode = $dom->find('.i-product-payment-option__price.js-price-with-vat');
+
+        if (!empty($productNode)) {
+            $productNode = $productNode[0]->text();
+            preg_match_all('!\d+!', str_replace(["\r\n", "\n", "\r"], ' ', $productNode), $result);
+            $productPrice = implode('.', $result[0]);
+            $currency = $this->checkCurrency($productNode);
+            $this->productPriceModel->product_relation_id = $productId;
+            $this->productPriceModel->product_price = $productPrice;
+            $this->productPriceModel->currency = $currency;
+
+            $this->productPriceModel->save();
+        }
+
+        return $this->productPriceModel;
+    }
+
     /**
      * Parse product price from 1a
      *
      * @param $dom
      * @param $productId
+     *
+     * @return ProductPrice|null
      */
     public function parse1aPrice($dom, $productId)
     {
@@ -75,6 +96,8 @@ class PriceParsers
      *
      * @param $dom
      * @param $productId
+     *
+     * @return ProductPrice
      */
     public function parseDateksPrice($dom, $productId)
     {
@@ -100,6 +123,8 @@ class PriceParsers
      *
      * @param $dom
      * @param $productId
+     *
+     * @return ProductPrice
      */
     public function parseRdPrice($dom, $productId)
     {

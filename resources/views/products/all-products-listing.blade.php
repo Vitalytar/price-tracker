@@ -61,24 +61,24 @@
                 productId = $(this).attr('data-product-id');
 
             $('<div></div>').appendTo('body')
-            .html('<div><h6>' + '<?= __('Vai Jūs vēlaties ieslēgt paziņojumus par šī produkta cenas izmiņām?') ?>' + '</h6></div>')
-            .dialog({
-                modal: true,
-                title: 'Ieslēgt paziņojumus',
-                zIndex: 1000,
-                autoOpen: true,
-                width: 'auto',
-                resizable: 'false',
-                buttons: {
-                    Jā: function () {
-                        $(this).remove();
-                        addLikedItem(productId, 1, currentProduct);
-                    },
-                    Nē: function() {
-                        addLikedItem(productId, 0, currentProduct);
-                        $(this).remove();
+                .html('<div><h6>' + '<?= __('Vai Jūs vēlaties ieslēgt paziņojumus par šī produkta cenas izmiņām?') ?>' + '</h6></div>')
+                .dialog({
+                    modal: true,
+                    title: 'Ieslēgt paziņojumus',
+                    zIndex: 1000,
+                    autoOpen: true,
+                    width: 'auto',
+                    resizable: 'false',
+                    buttons: {
+                        Jā: function () {
+                            $(this).remove();
+                            addLikedItem(productId, 1, currentProduct);
+                        },
+                        Nē: function () {
+                            addLikedItem(productId, 0, currentProduct);
+                            $(this).remove();
+                        }
                     }
-                }
             });
         });
 

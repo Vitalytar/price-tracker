@@ -25,7 +25,8 @@ class ParseProductController extends Controller
         'www.1a.lv',
         'www.rdveikals.lv',
         'www.ksenukai.lv',
-        'www.dateks.lv'
+        'www.dateks.lv',
+        'www.tet.lv'
     ];
 
     const ESCAPE_RUS = [
@@ -133,6 +134,9 @@ class ParseProductController extends Controller
                 case 'www.dateks.lv':
                     $this->priceParser->parseDateksPrice($dom, $productId);
                     break;
+                case 'www.tet.lv':
+                    $this->priceParser->parseTetPrice($dom, $productId);
+                    break;
             }
 
             $needToCreateProduct = false;
@@ -151,6 +155,9 @@ class ParseProductController extends Controller
             } elseif ($sourceWeb == 'www.dateks.lv') {
                 $this->parseProductData($dom, 'h1.name', 'img', $sourceWeb);
                 $this->priceParser->parseDateksPrice($dom, $this->productDetailsModel->id);
+            } elseif ($sourceWeb == 'www.tet.lv') {
+                $this->parseProductData($dom, '.i-product-data__title', '.i-product-page__gallery-image', $sourceWeb);
+                $this->priceParser->parseTetPrice($dom, $this->productDetailsModel->id);
             }
         }
 
@@ -208,6 +215,8 @@ class ParseProductController extends Controller
             $productImage = $dom->find($imageSelector)[0]->getAttribute('src');
         } elseif ($source == 'www.dateks.lv') {
             $productImage = 'https://' . $source . $dom->find($imageSelector)[0]->getAttribute('src');
+        } elseif ($source == 'www.tet.lv') {
+            $productImage = $dom->find($imageSelector)[0]->getAttribute('src');
         }
 
         $productName = $this->escapeCRLF($productName);
