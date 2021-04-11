@@ -36,6 +36,10 @@ Route::get('/check-product-price', function () {
     return view('products/check-product-price');
 })->name('check-product-price');
 
+Route::get('/my-account', function () {
+    return view('components/my-account');
+})->name('my-account');
+
 Route::get('all-products', function () {
     $products = Product::inRandomOrder()->get();
 
