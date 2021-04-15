@@ -15,6 +15,12 @@
         <small>Piemērs: https://trlprice.com/links-uz-produktu</small>
         <button type="submit"><?= __('Pārbaudīt cenas vēsturi') ?></button>
     </form>
+    <div class="advanced-parse-block">
+        <input type="button" id="spoiler-text" value="{{ __('Detalizēta pārbaude') }}" onclick="$('#advanced-block').toggleClass('not-active')">
+        <div id="advanced-block" class="advanced-parsing-block not-active">
+            {{ __('Test') }}
+        </div>
+    </div>
     <div class="parse-instruction-block">
         <h1 class="instruction-title">Kā tas strādā</h1>
         <div class="instruction-wrapper">

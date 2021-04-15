@@ -41,16 +41,17 @@
                              this.className='product-main-image placeholder-image'"
                     >
                     <div class="product-name"><?= $product->product_name ?></div>
-                    <div class="link-to-product-source">
-                        <a href="<?= $product->product_url ?>" target="_blank">
-                            <?= __('Avots: ') . $product->source_web ?>
-                        </a>
-                    </div>
                     <form method="POST" action="<?= route('parse-product') ?>">
                         @csrf
                         <input name="productUrl" value="<?= $product->product_url ?>" type="hidden">
                         <button type="submit"><?= __('Saņemt aktuālo cenu') ?></button>
                     </form>
+                    <x-product-price :productId="$product->id"/>
+                    <div class="link-to-product-source">
+                        <a href="<?= $product->product_url ?>" target="_blank">
+                            <?= __('Avots: ') . $product->source_web ?>
+                        </a>
+                    </div>
                 </a>
             </div>
         @endforeach

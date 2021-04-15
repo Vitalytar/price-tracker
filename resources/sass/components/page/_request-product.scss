@@ -1,4 +1,12 @@
 .request-product {
+    .advanced-parsing-block {
+        display: block;
+
+        &.not-active {
+            display: none;
+        }
+    }
+
     .product-request-form {
         display: flex;
         flex-direction: column;

@@ -1,0 +1,22 @@
+.my-account {
+    h1 {
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .user-main-data {
+        .row-title {
+            font-weight: 700;
+        }
+
+        ul {
+            li::before {
+                content: "\f00c";
+                font-family: 'Font Awesome 5 Free';
+                display: inline-block;
+                margin-left: -1.3em;
+                width: 1.3em;
+            }
+        }
+    }
+}
